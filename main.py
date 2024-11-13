@@ -7,7 +7,7 @@ class ChatSlangDFA:
         # Define transitions: {"state": {"input_symbol": "next_state"}}
         self.transitions = {
             "Start": {"LOL": "Middle", "OMG": "Middle", "SMH": "Middle", "IDK": "Middle"},
-            "Middle": {"LOL": "Middle", "BRB": "Middle", "SMH": "Middle", "IDK": "Middle",
+            "Middle": {"LOL": "Middle", "OMG": "Middle", "SMH": "Middle", "IDK": "Middle",
                        "😱": "Emoji", "😂": "Emoji", "🤷‍♀️": "Emoji", "🙄": "Emoji"},
             "Emoji": {"😱": "Accept", "😂": "Accept", "🤷‍♀️": "Accept", "🙄": "Accept"}
         }
@@ -21,15 +21,20 @@ class ChatSlangDFA:
     def process_input(self, input_sequence):
         self.reset()
         for symbol in input_sequence:
+            # Debug print to trace state transitions
+            #print(f"Current state: {self.current_state}, Input symbol: {symbol}")
             # Move to next state based on input symbol
             if symbol in self.transitions[self.current_state]:
                 self.current_state = self.transitions[self.current_state][symbol]
+                #print(f"Transitioned to: {self.current_state}")
             else:
+                #print("Invalid transition")
                 return "reject"
         # Final state check
-        if self.current_state == self.accepting_state:
+        if self.current_state in ["Emoji", "Accept"]:
             return "accept"
         return "reject"
+
 # Testing function
 def test_dfa(dfa, test_cases):
     results = {}
@@ -41,10 +46,10 @@ def test_dfa(dfa, test_cases):
 # Define test cases
 test_cases = [
     ["LOL", "😂"],
-    ["BRB", "🤷‍♀️"],
-    ["LOL", "BRB", "SMH", "🙄"],
+    ["IDK", "🤷‍♀️"],
+    ["LOL", "OMG", "SMH", "🙄"],
     ["LOL", "😱", "LOL"],  # Invalid sequence
-    ["SMH", "😂", "BRB"],  # Invalid sequence
+    ["SMH", "😂", "OMG"],  # Invalid sequence
 ]
 
 # Initialize DFA and run tests
