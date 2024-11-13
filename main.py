@@ -1,4 +1,4 @@
-class ChatSlangDFA:
+class SlangOGi:
     def __init__(self):
         # Define states
         self.states = ["Start", "Middle", "Emoji", "Accept"]
@@ -53,7 +53,7 @@ test_cases = [
 ]
 
 # Initialize DFA and run tests
-dfa = ChatSlangDFA()
+dfa = SlangOGi()
 test_results = test_dfa(dfa, test_cases)
 
 # Print test results
