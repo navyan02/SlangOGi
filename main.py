@@ -20,11 +20,14 @@ class SlangOGi:
            "SMH": "🙄",
            "IDK": "🤷‍♀️"
        }
+      
+       # Track all encountered abbreviations
+       self.abbreviations = set()
 
 
    def reset(self):
        self.current_state = "Start"
-       self.last_abbreviation = None
+       self.abbreviations = set()
 
 
    def process_input(self, input_sequence):
@@ -33,13 +36,13 @@ class SlangOGi:
            # Check if the symbol is valid for the current state
            if symbol in self.transitions[self.current_state]:
                self.current_state = self.transitions[self.current_state][symbol]
-               if self.current_state == "Middle":
-                   self.last_abbreviation = symbol  # Track the last abbreviation
-               elif self.current_state == "Emoji":
+               if self.current_state == "Middle":  # Record the abbreviation
+                   self.abbreviations.add(symbol)
+               elif self.current_state == "Emoji":  # Verify emoji match
                    if i != len(input_sequence) - 1:  # Emoji not at the end
                        return "reject"
-                   # Validate emoji matches the last abbreviation
-                   if self.valid_pairs.get(self.last_abbreviation) != symbol:
+                   # Check if emoji matches any abbreviation
+                   if not any(self.valid_pairs[abbr] == symbol for abbr in self.abbreviations):
                        return "reject"
            else:
                return "reject"
@@ -59,16 +62,17 @@ def test_dfa(dfa, test_cases):
 
 # Define test cases
 test_cases = [
-   ["LOL", "😂"],                  # Valid: Last abbreviation matches emoji
-   ["IDK", "🤷‍♀️"],              # Valid: Last abbreviation matches emoji
-   ["LOL", "OMG", "😱"],          # Valid: Last abbreviation matches emoji
-   ["SMH", "OMG", "🙄"],          # Invalid: Last abbreviation is OMG, emoji does not match
-   ["LOL", "IDK", "🤷‍♀️"],       # Valid: Last abbreviation matches emoji
-   ["LOL", "🤷‍♀️"],              # Invalid: Emoji does not match last abbreviation
-   ["SMH", "😂"],                 # Invalid: Emoji does not match last abbreviation
+   ["LOL", "😂"],                  # Valid: Single abbreviation, correct emoji
+   ["IDK", "🤷‍♀️"],              # Valid: Single abbreviation, correct emoji
+   ["LOL", "OMG", "😂"],          # Valid: Emoji matches one abbreviation (LOL)
+   ["OMG", "LOL", "🙄"],          # Valid: Emoji matches one abbreviation (SMH)
+   ["OMG", "LOL", "😱"],          # Valid: Emoji matches one abbreviation (OMG)
+   ["LOL", "IDK", "🤷‍♀️"],       # Valid: Emoji matches one abbreviation (IDK)
+   ["LOL", "🤷‍♀️"],              # Invalid: Emoji does not match abbreviation
+   ["SMH", "😂"],                 # Invalid: Emoji does not match abbreviation
    ["OMG", "😱", "LOL"],          # Invalid: Emoji not at end
    ["😂"],                        # Invalid: No abbreviation
-   ["😱", "OMG", "LOL"],          # Invalid: Emoji not at end
+   ["LOL", "OMG", "😱"],          # Valid: Emoji matches one abbreviation (OMG)
 ]
 
 
@@ -80,6 +84,5 @@ test_results = test_dfa(dfa, test_cases)
 # Print test results
 for sequence, result in test_results.items():
    print(f"Input: {sequence} -> Result: {result}")
-
 
 
