@@ -1,29 +1,15 @@
-digraph DFA { 
-    // Begin the definition of a directed graph for a DFA (Deterministic Finite Automaton)
-    rankdir=LR; 
-    // Specify that the graph should be laid out from left to right (LR)
+digraph DFA {
+    rankdir=LR;  // Specify the layout direction of the graph as left to right
 
-    size="8,5";
-    // Set the approximate size of the graph canvas (8 units wide by 5 units tall)
+    // Define the states of the DFA
+    Start [shape=circle, label="Start"];
+    Middle [shape=circle, label="Middle"];
+    Emoji [shape=circle, label="Emoji"];
+    Accept [shape=doublecircle, label="Accept"];
 
-    node [shape = doublecircle]; Start Accept; 
-    // Define the `Start` and `Accept` nodes as accepting states (double circles)
-
-    node [shape = circle]; 
-    // Define all subsequent nodes as regular states (single circles)
-
-    Start -> Middle [label="Slang words: LOL, OMG, SMH, IDK"]; 
-    // Define a transition from the `Start` state to the `Middle` state when encountering abbreviations (LOL, OMG, SMH, IDK)
-
-    Middle -> Middle [label="Slang words: LOL, OMG, SMH, IDK"]; 
-    // Define a self-loop on the `Middle` state for repeated abbreviations (LOL, OMG, SMH, IDK)
-
-    Middle -> Emoji [label="Emojis: 😂, 😱, 🙄, 🤷‍♀️"]; 
-    // Define a transition from the `Middle` state to the `Emoji` state when encountering an emoji (😂, 😱, 🙄, 🤷‍♀️)
-
-    Emoji -> Emoji [label="Emojis: 😂, 😱, 🙄, 🤷‍♀️"]; 
-    // Define a self-loop on the `Emoji` state for repeated emojis (😂, 😱, 🙄, 🤷‍♀️)
-
-    Emoji -> Accept [label="ε"]; 
-    // Define a transition from the `Emoji` state to the `Accept` state for an empty string (ε), marking the end of the input
+    // Define the transitions between states
+    Start -> Middle [label="LOL, OMG, SMH, IDK"];  // Transition from the Start state to Middle for specific abbreviations
+    Middle -> Middle [label="LOL, OMG, SMH, IDK"];  // Self-loop on Middle for repeated abbreviations
+    Middle -> Emoji [label="😱, 😂, 🤷‍♀️, 🙄"];     // Transition from Middle to Emoji for specific emojis
+    Emoji -> Accept [label=""];                     // Transition from Emoji to Accept with an empty label (ε)
 }
