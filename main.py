@@ -87,7 +87,7 @@ test_cases = [
     ["LOL", "😂"],                  # Valid: Single abbreviation, correct emoji
     ["IDK", "🤷"],                  # Valid: Single abbreviation, correct emoji
     ["LOL", "OMG", "😂"],           # Valid: Emoji matches one abbreviation (LOL)
-    ["OMG", "LOL", "🙄"],           # Valid: Emoji matches one abbreviation (SMH)
+    ["OMG", "LOL", "🙄"],           # Invalid
     ["OMG", "LOL", "😱"],           # Valid: Emoji matches one abbreviation (OMG)
     ["LOL", "IDK", "🤷"],           # Valid: Emoji matches one abbreviation (IDK)
     ["LOL", "🤷"],                  # Invalid: Emoji does not match abbreviation
