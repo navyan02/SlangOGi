@@ -10,6 +10,6 @@ digraph DFA {
     // Define the transitions between states
     Start -> Middle [label="LOL, OMG, SMH, IDK"];  // Transition from the Start state to Middle for specific abbreviations
     Middle -> Middle [label="LOL, OMG, SMH, IDK"];  // Self-loop on Middle for repeated abbreviations
-    Middle -> Emoji [label="😱, 😂, 🤷‍♀️, 🙄"];     // Transition from Middle to Emoji for specific emojis
+    Middle -> Emoji [label="😱, 😂, 🤷‍♂️, 🙄"];     // Transition from Middle to Emoji for specific emojis
     Emoji -> Accept [label="ε"];                     // Transition from Emoji to Accept with an empty label (ε)
 }
